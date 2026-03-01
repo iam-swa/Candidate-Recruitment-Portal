@@ -2,6 +2,23 @@
 Beautiful Gradio web interface for the Candidate Recruitment Portal.
 """
 
+# --- Monkey-patch: fix gradio_client crash on boolean JSON schemas ---
+# Pydantic models from LangChain/LangGraph emit "additionalProperties": false
+# in their JSON schemas. gradio_client tries to parse that `false` (a bool) as
+# a dict, crashing with: TypeError: argument of type 'bool' is not iterable.
+# This patch intercepts booleans before the buggy code path is reached.
+import gradio_client.utils as _gc_utils
+
+_orig_json_schema_to_python_type = _gc_utils._json_schema_to_python_type
+
+def _patched_json_schema_to_python_type(schema, defs=None):
+    if isinstance(schema, bool):
+        return "Any"
+    return _orig_json_schema_to_python_type(schema, defs)
+
+_gc_utils._json_schema_to_python_type = _patched_json_schema_to_python_type
+# --- End monkey-patch ---
+
 import os
 import gradio as gr
 from dotenv import load_dotenv
@@ -271,4 +288,4 @@ with gr.Blocks(
     )
 
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo.launch()
