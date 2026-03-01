@@ -524,4 +524,4 @@ with gr.Blocks() as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_port=7872, css=custom_css, theme=gr.themes.Default(primary_hue="blue", secondary_hue="indigo"))
+    demo.launch(css=custom_css, theme=gr.themes.Default(primary_hue="blue", secondary_hue="indigo"))
