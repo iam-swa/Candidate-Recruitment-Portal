@@ -5,6 +5,5 @@ structlog>=24.0.0
 python-dotenv>=1.0.1
 nest-asyncio>=1.6.0
 pydantic
-gradio
 gtts>=2.5.4
 SpeechRecognition>=3.14.5
