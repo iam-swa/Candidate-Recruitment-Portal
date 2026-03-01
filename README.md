@@ -1,74 +1,144 @@
-# Candidate-Recruitment-Portal
-AI-Powered Candidate Recruitment Portal
+Multi-Agent Career Assistance System 
+Overview
 
-**Introduction**
+This project implements a LangGraph-based multi-agent system designed to assist users with career preparation. The system follows a modular architecture inspired by the existing repository in the workspace and adheres to its coding style and structural patterns.
 
-The AI-Powered Candidate Recruitment Portal is a multi-agent intelligent system designed to simulate and streamline the recruitment process. The platform evaluates candidates through resume analysis, technical interviews, behavioral assessment, and performance evaluation using coordinated AI agents.The system is built using a multi-agent architecture where a central orchestrator manages communication between specialized agents. Each agent is responsible for a distinct stage of the recruitment workflow, ensuring modularity, scalability, and efficient decision-making.
+The architecture consists of:
 
-This platform aims to:
+1 Orchestrator Agent (ReAct-based)
 
-- Automate candidate screening
+4 Worker Agents
 
-- Provide structured interview simulations
-
-- Deliver constructive feedback
-
-- Generate comprehensive evaluation reports
+The orchestrator analyzes user intent and routes the request to the appropriate worker agent, which is exposed as a tool.
 
 System Architecture
+Orchestrator Agent (ReAct Agent)
 
-The system follows a multi-agent orchestration model consisting of:
+The main orchestrator agent:
 
-1 **Orchestrator Agent**
+Uses the ReAct reasoning pattern
 
-4 **Specialized Worker Agents**
+Identifies user intent
 
-Each worker agent performs a dedicated task, and the orchestrator coordinates the workflow.
-The Four Agents
+Selects the appropriate worker agent
 
-**1. Resume Helper Agent**
+Routes the request
 
-The Resume Helper Agent analyzes candidate resumes based on the selected job role.
-Responsibilities:
-Validate resume content against role requirements
-Identify missing technical skills
-Suggest improvements in structure and clarity
-Recommend enhancements aligned with industry standards
-Provide role-specific optimization feedback
-This agent ensures the candidate’s resume is aligned with the job expectations before proceeding to interviews.
+Returns the final consolidated response
 
-**2. Technical Interview Agent**
+Intent Categories
 
-The Technical Interview Agent conducts role-specific technical assessments.
-Responsibilities:
-Generate technical questions based on the selected role
-Evaluate candidate responses
-Assess conceptual clarity and practical knowledge
-Adapt question difficulty dynamically
-Provide structured technical feedback
-This agent simulates a real-world technical interview experience.
+The orchestrator classifies user queries into:
 
-**3. Behavioral / HR Interview Agent**
+resume_review
 
-The Behavioral Interview Agent evaluates soft skills and professional suitability.
-Responsibilities:
-Ask situational and behavioral questions
-Assess communication clarity
-Evaluate problem-solving approach
-Analyze leadership and teamwork responses
-Measure cultural fit indicators
-This agent ensures that the candidate meets organizational behavioral expectations.
+tech_interview
 
-**4. Evaluation & Scoring Agent**
+hr_interview
 
-The Evaluation Agent consolidates outputs from all other agents.
-Responsibilities:
-Aggregate resume, technical, and behavioral scores
-Generate overall candidate rating
-Highlight strengths and weaknesses
-Provide hiring recommendation
-Produce a structured final report
-This agent acts as the final decision-support system.
+company_info
 
-Manages data flow between agents
-Ensures structured execution of the workflow
+Each intent maps to one worker agent tool.
+
+Worker Agents
+1. Resume Helper Agent
+
+Purpose:
+Provides resume evaluation and improvement suggestions based on job roles.
+
+Capabilities:
+
+Contains structured role-based data including:
+
+Required skills
+
+Preferred skills
+
+Experience expectations
+
+Resume structure expectations
+
+Behavior:
+
+Accepts resume content and target role.
+
+Compares resume against role requirements.
+
+Identifies missing skills.
+
+Suggests improvements.
+
+Recommends rewording and impact-driven bullet points.
+
+Provides structured feedback.
+
+2. Tech Interview Helper Agent
+
+Purpose:
+Supports technical interview preparation.
+
+Capabilities:
+
+Generates role-specific technical interview questions.
+
+Explains technical concepts clearly.
+
+Provides sample answers.
+
+Simulates mock Q&A sessions.
+
+Behavior:
+
+When a role is specified:
+
+Generates relevant technical questions.
+
+When a concept is requested:
+
+Provides explanation and examples.
+
+Can guide users through practice sessions.
+
+3. HR Interview Helper Agent
+
+Purpose:
+Assists with HR round preparation.
+
+Capabilities:
+
+Generates common HR interview questions.
+
+Provides structured sample answers.
+
+Helps refine user responses.
+
+Guides users using behavioral frameworks (e.g., STAR method).
+
+Behavior:
+
+Provides role-independent HR preparation.
+
+Refines user-submitted answers.
+
+Suggests improvements for clarity and impact.
+
+4. General Knowledge Agent (Company Info Agent)
+
+Purpose:
+Provides structured company-related information.
+
+Capabilities:
+
+Company background
+
+Mission and vision
+
+Recent achievements
+
+Interview process overview
+
+Behavior:
+
+Responds to company-specific queries.
+
+Provides organized and concise company insights.
