@@ -1,5 +1,5 @@
 ---
-title: Gradio Chatbot
+title: Candidate Recruitment Portal
 emoji: 💬
 colorFrom: yellow
 colorTo: purple
