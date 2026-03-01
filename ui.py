@@ -121,7 +121,7 @@ h1 {
 
 /* User Message Bubble */
 .user-row .message-wrap {
-    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    background-color: #3b82f6 !important;
     color: white !important;
     border-radius: 1rem 1rem 0 1rem !important;
     border: none !important;

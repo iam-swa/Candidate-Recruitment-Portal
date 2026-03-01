@@ -60,21 +60,16 @@ class OrchestratorNode:
 
             result = agent.invoke({"messages": state.get("messages", [])})
             orchestrator_response = ""
-            ai_message = ""
 
             for msg in reversed(result.get("messages", [])):
-                if isinstance(msg, ToolMessage) and msg.content:
-                    orchestrator_response = msg.content
-                    break
                 if isinstance(msg, AIMessage) and msg.content and not getattr(msg, "tool_calls", None):
-                    ai_message = self._extract_text(msg.content)
+                    orchestrator_response = self._extract_text(msg.content)
+                    break
             
-            # Since React Agent processes steps and returns a final AIMessage, we typically want the AI message itself.
-            # Only fallback if empty.
-            if ai_message != "":
-                orchestrator_response = ai_message
-            elif orchestrator_response == "":
-                orchestrator_response = str(result)
+            if not orchestrator_response:
+                # Fallback in case no suitable AIMessage is found
+                logger.warning("No AIMessage found in agent response. Defaulting to a generic response.", agent_result=result)
+                orchestrator_response = "I'm sorry, I couldn't process that. Could you please rephrase?"
 
             return {
                 "messages": result.get("messages", []),
@@ -86,6 +81,6 @@ class OrchestratorNode:
             error_msg = f"Orchestrator node failed: {str(e)}"
             logger.error("Orchestrator node failed", error=str(e))
             return {
-                "orchestrator_result": None,
+                "orchestrator_result": "I'm sorry, but I encountered an error. Please try again.",
                 "error": [error_msg],
             }
