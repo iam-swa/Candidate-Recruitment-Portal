@@ -60,9 +60,14 @@ chatbot = gr.ChatInterface(
 )
 
 with gr.Blocks() as demo:
-    with gr.Sidebar():
-        gr.LoginButton()
-    chatbot.render()
+    with gr.Row():
+        # Left column (acts like sidebar)
+        with gr.Column(scale=1):
+            gr.LoginButton()
+
+        # Right column (main area)
+        with gr.Column(scale=4):
+            chatbot.render()
 
 
 if __name__ == "__main__":
