@@ -1,8 +1,11 @@
 gradio==4.44.0
+huggingface-hub==0.23.5
+
 langchain==0.2.16
 langgraph==0.2.34
 langchain-google-genai==1.0.10
 google-generativeai==0.7.2
+
 structlog==24.1.0
 python-dotenv==1.0.1
 nest-asyncio==1.6.0
