@@ -1,0 +1,27 @@
+{
+  "conversation_id": "recruitment_session_-4110231887846085013",
+  "updated_at": "2026-03-01T16:08:48.660144",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hi"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Hello! I'm your AI Recruitment Assistant. I can help you with resume reviews, technical interview prep, HR interview questions, and general company information. How can I assist you today?",
+          "extras": {
+            "signature": "CqwBAb4+9vuhG5Wq0CLq16tzz7Iyfagn3IVFPd4Zc38kbrDyCcvWFrRFGJfFvjASWZ1QDSicnqtQa1nYeg+Qdxho1b4Pti8kntMj+84DzJ/9XcCg9DYDHyL/LKGdC8fG+DAlaX0C945wzZnhLw7DMidtF8jm+9yZjTg3ggIJ/wbksq1Q8QjZajcSu6QWJCgpgi1aX55084KqU0Fah6Am0WhOb4ydEHI79AQ6/DqV0Q=="
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "user_intent": "unknown",
+    "turn_count": 0
+  },
+  "created_at": "2026-03-01T16:08:48.660144"
+}
