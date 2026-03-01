@@ -1,0 +1,128 @@
+"""
+Multi-Agent Workflow for the Candidate Recruitment Portal.
+
+Implements a LangGraph workflow orchestrating multiple recruitment agents.
+"""
+
+import os
+from typing import Any, Dict, List, Optional
+import structlog
+from langchain_core.messages import AIMessage, HumanMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.state import CompiledStateGraph
+
+from app.agents.state import RecruitmentState, get_initial_state
+from app.nodes.orchestrator_node import OrchestratorNode
+
+logger = structlog.get_logger(__name__)
+
+class RecruitmentWorkflow:
+    """LangGraph workflow with multi-agent integration for recruitment."""
+
+    def __init__(
+        self,
+        orchestrator_node: OrchestratorNode,
+        conversation_id: Optional[str] = None,
+    ) -> None:
+        self.orchestrator_node = orchestrator_node
+
+        self.memory = MemorySaver()
+        self.workflow = self._create_workflow()
+        self.conversation_id = conversation_id or f"recruitment_session_{hash(str(os.urandom(8)))}"
+        self.thread_id = self.conversation_id
+        self.config = {"configurable": {"thread_id": self.thread_id}}
+        self._state: Optional[RecruitmentState] = None
+
+        logger.info("RecruitmentWorkflow initialized", conversation_id=self.conversation_id)
+
+    def _create_workflow(self) -> CompiledStateGraph:
+        """Create and compile the LangGraph workflow."""
+        workflow = StateGraph(RecruitmentState)
+
+        workflow.add_node("orchestrator", self.orchestrator_node.process)
+        workflow.add_edge(START, "orchestrator")
+        workflow.add_edge("orchestrator", END)
+
+        return workflow.compile(checkpointer=self.memory)
+
+    def _get_current_state(self) -> RecruitmentState:
+        """Get the current state or initialize a new one."""
+        if self._state is None:
+            self._state = get_initial_state()
+        return self._state
+
+    def process_query(self, user_message: str) -> Dict[str, Any]:
+        """Process a query synchronously through the workflow."""
+        try:
+            state = self._get_current_state()
+
+            state["messages"] = list(state.get("messages", [])) + [
+                HumanMessage(content=user_message)
+            ]
+            state["user_query"] = user_message
+            state["user_intent"] = "unknown" # Reset intent for new turn
+
+            final_state = self.workflow.invoke(state, self.config)
+            self._state = dict(final_state)
+
+            response = final_state.get("orchestrator_result", "Hi there! How can I help you today?")
+
+            return {
+                "success": True,
+                "response": response,
+                "state": final_state,
+            }
+        except Exception as e:
+            logger.error("Workflow processing failed", error=str(e))
+            return {
+                "success": False,
+                "response": "An error occurred while processing.",
+                "error": str(e),
+            }
+
+    async def process_query_async(self, user_message: str) -> Dict[str, Any]:
+        """Process a query asynchronously through the workflow."""
+        try:
+            state = self._get_current_state()
+
+            state["messages"] = list(state.get("messages", [])) + [
+                HumanMessage(content=user_message)
+            ]
+            state["user_query"] = user_message
+            state["user_intent"] = "unknown"
+
+            final_state = await self.workflow.ainvoke(state, self.config)
+            self._state = dict(final_state)
+
+            response = final_state.get("orchestrator_result", "Hi there! How can I help you today?")
+
+            return {
+                "success": True,
+                "response": response,
+                "state": final_state,
+            }
+        except Exception as e:
+            logger.error("Workflow processing failed", error=str(e))
+            return {
+                "success": False,
+                "response": "An error occurred while processing.",
+                "error": str(e),
+            }
+
+    def chat(self, user_message: str) -> str:
+        """Simple chat interface that returns just the response string."""
+        result = self.process_query(user_message)
+        return result.get("response", "An error occurred while processing.")
+
+    def reset(self) -> None:
+        """Reset the conversation state and start a new conversation."""
+        self._state = None
+        self.conversation_id = f"recruitment_session_{hash(str(os.urandom(8)))}"
+        self.thread_id = self.conversation_id
+        self.config = {"configurable": {"thread_id": self.thread_id}}
+        logger.info("Workflow state reset", new_conversation_id=self.conversation_id)
+
+    def get_state(self) -> Optional[RecruitmentState]:
+        """Get the current conversation state."""
+        return self._state
