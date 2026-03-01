@@ -26,21 +26,27 @@ def main():
     
     print("\nWorkflow initialized and ready to handle queries.")
     
-    # Example Test Queries demonstrating routing and capabilities
-    test_queries = [
-        "What is the background of this company and the interview process?", # Should route to general_info
-        "Here is my resume: Python, Java, 1.5 years experience. Is it good for a Data Scientist role?", # Should route to resume_helper
-        "Can you ask me some technical questions for a Frontend Developer role?", # Should route to tech_interview
-        "I have a behavioral round next week. What are common questions and how should I answer using the STAR method?", # Should route to hr_interview
-    ]
+    print("\nWorkflow initialized and ready to handle queries.")
     
-    for i, query in enumerate(test_queries, 1):
-        print(f"\n[{i}] 👤 USER: {query}")
-        result = workflow.chat(query)
-        print(f"🤖 AGENT: {result}")
-        print("-" * 50)
-        # Reset workflow for fresh state between independent test examples (optional)
-        workflow.reset()
+    while True:
+        try:
+            query = input("\n👤 USER: ")
+            if query.lower() in ['exit', 'quit']:
+                print("Goodbye!")
+                break
+                
+            if not query.strip():
+                continue
+                
+            result = workflow.chat(query)
+            print(f"\n🤖 AGENT: {result}")
+            print("-" * 50)
+            
+        except KeyboardInterrupt:
+            print("\nGoodbye!")
+            break
+        except Exception as e:
+            print(f"\n❌ ERROR: {e}")
 
 if __name__ == "__main__":
     main()

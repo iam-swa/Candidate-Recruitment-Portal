@@ -14,6 +14,7 @@ from langgraph.graph.state import CompiledStateGraph
 
 from app.agents.state import RecruitmentState, get_initial_state
 from app.nodes.orchestrator_node import OrchestratorNode
+from app.utils.conversation_store import get_conversation_store
 
 logger = structlog.get_logger(__name__)
 
@@ -26,6 +27,7 @@ class RecruitmentWorkflow:
         conversation_id: Optional[str] = None,
     ) -> None:
         self.orchestrator_node = orchestrator_node
+        self.conversation_store = get_conversation_store()
 
         self.memory = MemorySaver()
         self.workflow = self._create_workflow()
@@ -33,6 +35,8 @@ class RecruitmentWorkflow:
         self.thread_id = self.conversation_id
         self.config = {"configurable": {"thread_id": self.thread_id}}
         self._state: Optional[RecruitmentState] = None
+
+        self._load_conversation_history()
 
         logger.info("RecruitmentWorkflow initialized", conversation_id=self.conversation_id)
 
@@ -45,6 +49,57 @@ class RecruitmentWorkflow:
         workflow.add_edge("orchestrator", END)
 
         return workflow.compile(checkpointer=self.memory)
+
+    def _load_conversation_history(self) -> None:
+        """Load conversation history from file storage."""
+        stored_messages = self.conversation_store.get_messages(self.conversation_id)
+        if stored_messages:
+            self._state = get_initial_state()
+            messages = []
+            for msg in stored_messages:
+                if msg.get("role") == "user":
+                    messages.append(HumanMessage(content=msg.get("content", "")))
+                elif msg.get("role") == "assistant":
+                    messages.append(AIMessage(content=msg.get("content", "")))
+            self._state["messages"] = messages
+
+            conversation_data = self.conversation_store.load_conversation(self.conversation_id)
+            if conversation_data and conversation_data.get("metadata"):
+                metadata = conversation_data["metadata"]
+                self._state["user_intent"] = metadata.get("user_intent", "unknown")
+                self._state["turn_count"] = metadata.get("turn_count", 0)
+
+            logger.info("Loaded conversation history", conversation_id=self.conversation_id, message_count=len(messages))
+
+    def _save_conversation(self) -> None:
+        """Save current conversation to file storage."""
+        if self._state is None:
+            return
+
+        messages: List[Dict[str, Any]] = []
+        for msg in self._state.get("messages", []):
+            if isinstance(msg, HumanMessage):
+                messages.append({
+                    "role": "user",
+                    "content": msg.content,
+                })
+            elif isinstance(msg, AIMessage) and msg.content:
+                if not getattr(msg, "tool_calls", None):
+                    messages.append({
+                        "role": "assistant",
+                        "content": msg.content,
+                    })
+
+        metadata = {
+            "user_intent": self._state.get("user_intent", "unknown"),
+            "turn_count": self._state.get("turn_count", 0),
+        }
+
+        self.conversation_store.save_conversation(
+            self.conversation_id,
+            messages,
+            metadata,
+        )
 
     def _get_current_state(self) -> RecruitmentState:
         """Get the current state or initialize a new one."""
@@ -65,6 +120,8 @@ class RecruitmentWorkflow:
 
             final_state = self.workflow.invoke(state, self.config)
             self._state = dict(final_state)
+            
+            self._save_conversation()
 
             response = final_state.get("orchestrator_result", "Hi there! How can I help you today?")
 
@@ -94,6 +151,8 @@ class RecruitmentWorkflow:
 
             final_state = await self.workflow.ainvoke(state, self.config)
             self._state = dict(final_state)
+            
+            self._save_conversation()
 
             response = final_state.get("orchestrator_result", "Hi there! How can I help you today?")
 
@@ -115,6 +174,23 @@ class RecruitmentWorkflow:
         result = self.process_query(user_message)
         return result.get("response", "An error occurred while processing.")
 
+    def get_greeting(self) -> str:
+        """Get initial greeting from the orchestrator."""
+        try:
+            model = self.orchestrator_node.orchestrator_agent.model
+            response = model.invoke(
+                "You are an AI assistant for a candidate recruitment portal. Generate a brief, welcoming greeting for a new user who wants guidance on their interview process or analyzing their resume. Keep it to 1-2 sentences. Let them know you are here to help."
+            )
+
+            if response and response.content:
+                return response.content
+
+            return "Welcome to the Candidate Recruitment Portal! How can I help you regarding your interview preparation?"
+
+        except Exception as e:
+            logger.error("Failed to get greeting", error=str(e))
+            return "Welcome to the Candidate Recruitment Portal! How can I help you regarding your interview preparation?"
+
     def reset(self) -> None:
         """Reset the conversation state and start a new conversation."""
         self._state = None
@@ -122,6 +198,23 @@ class RecruitmentWorkflow:
         self.thread_id = self.conversation_id
         self.config = {"configurable": {"thread_id": self.thread_id}}
         logger.info("Workflow state reset", new_conversation_id=self.conversation_id)
+
+    def delete_conversation(self) -> bool:
+        """Delete the current conversation from storage."""
+        return self.conversation_store.delete_conversation(self.conversation_id)
+
+    def list_conversations(self) -> List[Dict[str, Any]]:
+        """List all stored conversations."""
+        return self.conversation_store.list_conversations()
+
+    def load_conversation(self, conversation_id: str) -> bool:
+        """Load a specific conversation by ID."""
+        self.conversation_id = conversation_id
+        self.thread_id = conversation_id
+        self.config = {"configurable": {"thread_id": self.thread_id}}
+        self._state = None
+        self._load_conversation_history()
+        return self._state is not None
 
     def get_state(self) -> Optional[RecruitmentState]:
         """Get the current conversation state."""
