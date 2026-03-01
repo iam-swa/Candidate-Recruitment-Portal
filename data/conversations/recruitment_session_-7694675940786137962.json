@@ -1,0 +1,35 @@
+{
+  "conversation_id": "recruitment_session_-7694675940786137962",
+  "updated_at": "2026-03-01T19:26:54.404323",
+  "messages": [
+    {
+      "role": "user",
+      "content": "what tech questions will i get for sde intern"
+    },
+    {
+      "role": "assistant",
+      "content": "Alright, aspiring SDE Intern! Let's get you prepped. For an intern role, interviewers typically focus on foundational knowledge, problem-solving skills, and a grasp of basic data structures and algorithms. They want to see how you think and if you have a solid grasp of core computer science concepts.\n\nHere are three technical questions, ranging from conceptual to practical, that you might encounter:\n\n1.  **Conceptual/OOP:** Explain the four fundamental principles of Object-Oriented Programming (OOP). Pick one and provide a simple real-world example of how it's applied.\n2.  **Data Structures & Algorithms (Coding):** Given a non-empty array of integers `nums`, every element appears twice except for one. Find that single one.\n    *   *Example:* `nums = [4,1,2,1,2]` Output: `4`\n    *   *Constraint:* Your algorithm should have a linear runtime complexity. Could you implement this in your preferred language?\n3.  **Problem Solving/Basic Systems:** Imagine you're building a feature for a social media app where users can \"like\" posts. If you were designing a very basic system to count likes for a single post, how would you store and update this count in a way that's efficient and handles multiple users liking the post at roughly the same time? What are potential issues with your approach?\n\nWhich one would you like to tackle first, or would you like a hint on any of them?"
+    },
+    {
+      "role": "user",
+      "content": "OOps"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "It seems like you might have meant to ask about Object-Oriented Programming (OOP)! Would you like me to explain the four fundamental principles of OOP, or perhaps dive into one of them in more detail?",
+          "extras": {
+            "signature": "Cu4FAb4+9vvft1e3PnINw5Koxzdt40BVhygt/HjWAl4XF8KFRjfpHPl/OCifCpP/1pObs4ag8GWJg7h6JUQ6M5crohzvWqIRqLKr7blc58+fE1I6EhYq6AsS2boPBZglbk6iXkkTg2Ou41Aogy8UOS9oK+AhQ3DRbpKZZTWXppCblqUTTGITHT2BGAyxKRz1Hkhh7IA101H+jiwIj82kHLzcXFco9977w3mho2R0ouoIshfpb0aXRPewrLCdaGTYRbuoydAX57Nv4AXTHrdlWo/4+QzB0x8IlBimIavuXXTjVtMZwuaDIJt3G+RLB3oyMCzosdtuiG2XjxfqNIhKHigPC3ujoYcxO5r1oN/I1ugnmeTDlc7kOfxCJO1OvFhWBa8x94FMDwLtAxnlWHhbNcHgX68xLsXnkI2CgSJTcIULXvBtfSL9RoD9I8MM/BWRY7Uf+PkacjJ9fdU6PPRRcBD3Uy3LSBQMh/903fZKOYrHYUoOuvv/5qdN43eboqZbHF3MTD1Ng/Ks2e1p0jRR2my017lIjWaww0N1hCcbChrjQGplSRDeYztkAnMkv964fx0gfFyV3sMvG99RgIoS6tDzJRceEcftz8o1Jg9+z8Iv8Bi+fdHe++XbNpaS2IfATQl3Z4vsmg6uSgVb4gU15u/MhLdK/8+CC7WM3jV0B6W3+wp6Cil5vkm4cSaWoGPZZmAFlHYpmAA/aqzyW1TNIVsOirfW4z0wCY9qvMGhaWSgKMpK6PBHZTKbxEcESipEys01aTeI8Xrd+S+s5BIWBSKy1h3jnHpP8soDQT+H37TfIYOUrVVhmCUUsOBEsFgJHm28NjIIts37XaY/MN+cIf8u6Lh24kPdnpQRWySDlLlEw8M9i03q7vw9MTsCq0VN6U7ZOlLjjv5ECmQI0T2H1MAcbkxBYdLGuUM7/KHO165K6HghlKwbkFUPPMxv4Stc0YWseo49qA+B9vWyVDnknTrLCyLvk5p3oISGO/s5pkoR"
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "user_intent": "unknown",
+    "turn_count": 0
+  },
+  "created_at": "2026-03-01T19:25:36.682011"
+}
