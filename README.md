@@ -6,10 +6,15 @@ AI-Powered Candidate Recruitment Portal
 The AI-Powered Candidate Recruitment Portal is a multi-agent intelligent system designed to simulate and streamline the recruitment process. The platform evaluates candidates through resume analysis, technical interviews, behavioral assessment, and performance evaluation using coordinated AI agents.The system is built using a multi-agent architecture where a central orchestrator manages communication between specialized agents. Each agent is responsible for a distinct stage of the recruitment workflow, ensuring modularity, scalability, and efficient decision-making.
 
 This platform aims to:
+
 Automate candidate screening
+
 Provide structured interview simulations
+
 Deliver constructive feedback
+
 Generate comprehensive evaluation reports
+
 System Architecture
 
 The system follows a multi-agent orchestration model consisting of:
