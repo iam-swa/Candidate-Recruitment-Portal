@@ -1,4 +1,5 @@
-**Multi-Agent Career Assistance System **
+**Multi-Agent Career Assistance System**
+
 **Overview**
 
 This project implements a LangGraph-based multi-agent system designed to assist users with career preparation. The system follows a modular architecture inspired by the existing repository in the workspace and adheres to its coding style and structural patterns.
@@ -12,6 +13,7 @@ The architecture consists of:
 The orchestrator analyzes user intent and routes the request to the appropriate worker agent, which is exposed as a tool.
 
 System Architecture
+
 **Orchestrator Agent (ReAct Agent)**
 
 The main orchestrator agent:
