@@ -11,10 +11,13 @@ Generate comprehensive evaluation reports
 System Architecture
 
 The system follows a multi-agent orchestration model consisting of:
+
 1 **Orchestrator Agent**
 4 **Specialized Worker Agents**
+
 Each worker agent performs a dedicated task, and the orchestrator coordinates the workflow.
 The Four Agents
+
 **1. Resume Helper Agent**
 The Resume Helper Agent analyzes candidate resumes based on the selected job role.
 Responsibilities:
