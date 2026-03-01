@@ -1,0 +1,27 @@
+{
+  "conversation_id": "recruitment_session_8731440600731289795",
+  "updated_at": "2026-03-01T15:55:49.682435",
+  "messages": [
+    {
+      "role": "user",
+      "content": "hi"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your AI Recruitment Assistant. I can help you with resume reviews, technical interview prep, HR interview prep, and general knowledge about companies. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "I am applying for Software Development Intern Role so what kind of questions shall I expect"
+    },
+    {
+      "role": "assistant",
+      "content": "Great! For a Software Development Intern role, interviewers will typically focus on your foundational computer science knowledge, problem-solving skills, and your potential to learn and grow. They won't expect you to be an expert, but rather to understand the basics well and demonstrate strong analytical thinking.\n\nHere are three technical questions you might expect, ranging from conceptual to a practical coding challenge:\n\n1.  **Conceptual/Fundamentals:** Explain what an algorithm is, and give an example of one you've used or implemented. Why is understanding data structures and algorithms important for a software developer?\n2.  **Problem Solving/Coding:** Write a function in a language of your choice that takes a list of integers and returns a new list containing only the even numbers from the original list. For example, if the input is `[1, 2, 3, 4, 5]`, the output should be `[2, 4]`.\n3.  **Practical/Tools:** Imagine you're working on a small project with a team. Why would you use a version control system like Git, and what are some basic Git commands you would use daily?\n\nWhich one would you like to tackle first, or would you like me to elaborate on any of them?"
+    }
+  ],
+  "metadata": {
+    "user_intent": "unknown",
+    "turn_count": 0
+  },
+  "created_at": "2026-03-01T15:54:58.045698"
+}

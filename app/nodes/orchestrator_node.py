@@ -7,7 +7,6 @@ import structlog
 
 from app.agents.base_agent import BaseAgent
 from app.agents.state import RecruitmentState
-from app.utils.intent_detector import detect_intent
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langgraph.prebuilt import create_react_agent
 from app.tools.recruitment_tools import get_recruitment_tools
@@ -46,12 +45,8 @@ class OrchestratorNode:
 
             current_intent = state.get("user_intent", "unknown")
 
-            if current_intent == "unknown" and user_msg:
-                current_intent = detect_intent(user_msg, api_key=self.orchestrator_agent.api_key)
-
+            # Update state with the intent so it's passed to prompt correctly
             tools = get_recruitment_tools()
-            
-            # Update state with the detected intent so it's passed to prompt correctly
             state_with_intent = dict(state)
             state_with_intent["user_intent"] = current_intent
             

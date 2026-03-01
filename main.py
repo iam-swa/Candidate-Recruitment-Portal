@@ -12,6 +12,12 @@ load_dotenv()
 from app.agents.orchestrator_agent import OrchestratorAgent
 from app.nodes.orchestrator_node import OrchestratorNode
 from app.workflows.recruitment_workflow import RecruitmentWorkflow
+def create_app(conversation_id: str | None = None) -> RecruitmentWorkflow:
+    """Create and configure the multi-agent workflow application."""
+    orchestrator_agent = OrchestratorAgent()
+    orchestrator_node = OrchestratorNode(orchestrator_agent)
+    workflow = RecruitmentWorkflow(orchestrator_node, conversation_id)
+    return workflow
 
 def main():
     print("Welcome to the Candidate Recruitment Portal!")
