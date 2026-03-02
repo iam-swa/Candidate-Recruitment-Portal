@@ -34,6 +34,7 @@ init_db()
 
 def transcribe_audio(audio_path):
     """Convert audio file to text"""
+    
     if not audio_path:
         return ""
     
