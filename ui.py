@@ -77,9 +77,9 @@ def init_session():
     if not greeting:
         greeting = "Welcome to the Candidate Recruitment Portal! How can I help you today?"
         
-    greeting_audio = speak(greeting, play=False)
+    #greeting_audio = speak(greeting, play=False)
     initial_history = [{"role": "assistant", "content": greeting}]
-    return initial_history, greeting_audio, workflow
+    return initial_history, None, workflow
 
 # Custom CSS for modern interface
 custom_css = """
