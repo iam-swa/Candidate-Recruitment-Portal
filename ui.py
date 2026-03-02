@@ -241,7 +241,7 @@ with gr.Blocks(
 
         with gr.Tabs():
             with gr.TabItem("AI Assistant"):
-                chatbot = gr.Chatbot(height=500, elem_classes=["chatbot"])
+                chatbot = gr.Chatbot(type="messages", height=500, elem_classes=["chatbot"])
                 audio_output = gr.Audio(autoplay=True)
                 audio_input = gr.Audio(sources=["microphone"], type="filepath")
                 text_input = gr.Textbox()
